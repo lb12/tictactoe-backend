@@ -1,4 +1,6 @@
-const { isPair } = require("./math");
+const {
+  isPair
+} = require("./math");
 
 // Devuelve el número de la fila a partir del index del array
 const getRowNum = (id, totalRows) => {
@@ -57,11 +59,11 @@ const checkWin = (
     currentSquares.filter(cs => cs !== undefined).length ===
     Math.pow(BOARD_SIZE, 2);
 
-  const finalMessage = isVictory
-    ? `'${turnLetter}' GANA`
-    : isDraw
-    ? "EMPATE"
-    : `Turno de '${turnLetter === "X" ? "O" : "X"}'`;
+  const finalMessage = isVictory ?
+    `'${turnLetter}' GANA` :
+    isDraw ?
+    "EMPATE" :
+    `Turno de '${turnLetter === "X" ? "O" : "X"}'`;
 
   return finalMessage;
 };
@@ -79,15 +81,7 @@ const checkTicTacToeDiagonales = (
 
   if (!isDiagonalAvailable(row, col) && row !== col) return false;
 
-  for (let _row = 0; _row < totalRows; _row++) {
-    const squareId = _row + totalRows * _row;
 
-    if (currentSquares[squareId] !== currentLetterTurn) {
-      ticTacToe = false;
-      break;
-    }
-    diagonales.push(squareId);
-  }
 
   if (!ticTacToe) {
     let _col = totalRows - 1;
@@ -158,10 +152,35 @@ const getColPoints = (colPoint, BOARD_SIZE) => {
   return colPoints;
 };
 
+const getLeftDiagonalPoints = (BOARD_SIZE) => {
+  const diagonalPoints = [];
+  for (let row = 0; row < BOARD_SIZE; row++) {
+    const index = row + BOARD_SIZE * row;
+    diagonalPoints.push(index);
+  }
+
+  return diagonalPoints;
+}
+
+const getRightDiagonalPoints = (BOARD_SIZE) => {
+  const diagonalPoints = [];
+  let col = BOARD_SIZE - 1;
+
+  for (let row = 0; row < BOARD_SIZE; row++, col--) {
+    const index = col + BOARD_SIZE * row;
+    diagonalPoints.push(index);
+  }
+
+  return diagonalPoints;
+}
+
 module.exports = {
-    isDiagonalAvailable,
-    getRowPoints,
-    getRowNum,
-    getColPoints,
-    getColNum
+  isDiagonalAvailable,
+  getRowPoints,
+  getRowNum,
+  getColPoints,
+  getColNum,
+  isDiagonalAvailable,
+  getLeftDiagonalPoints,
+  getRightDiagonalPoints
 }

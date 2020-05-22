@@ -18,8 +18,8 @@ const getNewPlay = (req, res, next) => {
     const player = isPlayerX ? 'X' : 'O';
     const rival = isPlayerX ? 'O' : 'X';
 
-    const message = playsService.getNewPlay(board, player, rival);
-    res.status(200).json(message);
+    const newBoard = playsService.getNewPlay(board, player, rival);
+    res.status(200).json({ board: newBoard });
 };
 
 

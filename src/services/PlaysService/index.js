@@ -1,7 +1,6 @@
 'use strict';
 
 const ticTacToe = require('../../lib/tictactoe');
-const tictactoe = require('../../lib/tictactoe');
 
 /**
  * Realiza una jugada por el player en el tablero pasado
@@ -33,10 +32,14 @@ const getNewPlay = (board, player, rival) => {
     }
 
     // Si no, marcar aleatoriamente
-    if (playedIndex === -1)
-        playedIndex = -1; // aleatorio
+    if (playedIndex === -1) {
+        playedIndex = getRandomIndex(board); // aleatorio
+        console.log("Punto retornado: ", playedIndex);
+    }
 
-    return { playedIndex };
+    board[playedIndex] = player;
+
+    return board;
 };
 
 const getPlayerIndexes = (board, playerSide) => {
@@ -59,44 +62,73 @@ const obtainWinnerPoint = (playerIndexes, rivalIndexes) => {
             winnerPoint = obtainWinnerColPoint(playerIndex, playerIndexes, rivalIndexes);            
             if (winnerPoint !== -1) return winnerPoint;
             
-            // Comprobar diagonales
-                // Sacar diagonal de este punto
-                    // Comprobar si los puntos de esta diagonal están en los puntos donde ha jugado el jugador
-                        // Si hay 2 coincidencias, podemos hacer victoria en el punto de la diagonal que falta si no está ocupado ya.
+            console.log('Compruebo diagonales');
+            winnerPoint = obtainerWinnerDiagonalPoint(playerIndex, playerIndexes, rivalIndexes);            
+            if (winnerPoint !== -1) return winnerPoint;
         }
     }
     return -1;
 }
 
 const obtainWinnerRowPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
-    // Sacar fila de este punto
-    const rowNum = tictactoe.getRowNum(currentPlayerIndex, 3);
-    // Sacar fila de este punto
-    const rowPoints = tictactoe.getRowPoints(rowNum, 3);
-    return obtainWinnerRowColPoint(rowPoints, playerIndexes, rivalIndexes);
+    // Sacar número de fila
+    const rowNum = ticTacToe.getRowNum(currentPlayerIndex, 3);
+    // Sacar puntos de la fila
+    const rowIndexes = ticTacToe.getRowPoints(rowNum, 3);
+    return obtainPossibleWinnerIndex(rowIndexes, playerIndexes, rivalIndexes);
 }
 
-const obtainWinnerRowColPoint = (rowOrColPoints, playerIndexes, rivalIndexes) => {
-    // Obtener los puntos de esta fila o col que NO están dentro de los puntos donde ha jugado el jugador
-    const unmarkedPoints = rowOrColPoints.filter( point => !playerIndexes.includes(point));
-    if (unmarkedPoints.length > 1) return -1;
-    // Si hay 2 coincidencias, podemos hacer victoria en el punto de la fila o col que falta si no está ocupado ya.
-    const possibleWinnerIndex = unmarkedPoints[0];
+const obtainPossibleWinnerIndex = (indexes, playerIndexes, rivalIndexes) => {
+    const unmarkedIndexes = indexes.filter( index => !playerIndexes.includes(index));
+    return obtainWinnerIndexIfNotChosen(unmarkedIndexes, rivalIndexes);
+}
+
+const obtainWinnerIndexIfNotChosen = (unmarkedIndexes, rivalIndexes) => {
+    const moreThanOnePossibility = unmarkedIndexes.length > 1;
+
+    if (moreThanOnePossibility) return -1;    
+
+    const possibleWinnerIndex = unmarkedIndexes[0];
+
     if (!rivalIndexes.includes(possibleWinnerIndex)) {
-        // devolver el index para marcarlo en el tablero.
         return possibleWinnerIndex;
     }
+
     return -1;
 }
 
 const obtainWinnerColPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
     // Sacar número de columna
-    const colNum = tictactoe.getColNum(currentPlayerIndex, 3);
+    const colNum = ticTacToe.getColNum(currentPlayerIndex, 3);
     // Sacar puntos de la columna
-    const colPoints = tictactoe.getColPoints(colNum, 3);
-    return obtainWinnerRowColPoint(colPoints, playerIndexes, rivalIndexes);
+    const colIndexes = ticTacToe.getColPoints(colNum, 3);
+    return obtainPossibleWinnerIndex(colIndexes, playerIndexes, rivalIndexes);
 }
 
+const obtainerWinnerDiagonalPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
+    const rowNum = ticTacToe.getRowNum(currentPlayerIndex, 3);
+    const colNum = ticTacToe.getColNum(currentPlayerIndex, 3);
+    
+    if (!ticTacToe.isDiagonalAvailable(rowNum, colNum)) {
+        return -1;
+    }
+
+    let possibleIndex = -1;
+
+    const leftDiagonalIndexes = ticTacToe.getLeftDiagonalPoints(3);
+    possibleIndex = obtainPossibleWinnerIndex(leftDiagonalIndexes, playerIndexes, rivalIndexes);
+    
+    if (possibleIndex === -1) {
+        const rightDiagonalIndexes = ticTacToe.getRightDiagonalPoints(3);
+        possibleIndex = obtainPossibleWinnerIndex(rightDiagonalIndexes, playerIndexes, rivalIndexes);
+    }
+
+    return possibleIndex;
+}
+
+const getRandomIndex = board => {
+    return board.filter(index => !index)[0];
+}
 
 
 module.exports = {
