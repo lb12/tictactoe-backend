@@ -1,5 +1,6 @@
 'use strict';
 
 module.exports = {
-    HomeRouter: require('./Home')
+    HomeRouter: require('./Home'),
+    PlaysRouter: require('./Plays')
 };
