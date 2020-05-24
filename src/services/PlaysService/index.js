@@ -1,6 +1,93 @@
 'use strict';
 
-const ticTacToe = require('../../lib/tictactoe');
+const tictactoe = require('../../lib/tictactoe');
+const { gameStatus } = require('../../utils/dictionary-codes');
+
+
+
+const getGameStatus = (board, player, rival) => {
+    const playerIndexes = getPlayerIndexes(board, player);
+    const rivalIndexes =  getPlayerIndexes(board, rival);
+
+    let result = false;
+    // Comprobar si hemos ganado
+    result = checkPlayerWin(board, playerIndexes, player);
+
+    // Comprobar si hemos perdido
+    if (!result) {
+        result = checkPlayerWin(board, rivalIndexes, rival);
+    }
+
+    if (!result && !isGameFinished(board)) {
+        return gameStatus.GAME_IN_PROGRESS;
+    }
+
+    // Comprobar si hemos empatado
+    if (!result) {
+        result = gameStatus.DRAW;
+    }
+
+    return result;
+}
+
+const checkPlayerWin = (board, playerIndexes, playerSide) => {
+    for (let i = 0; i < playerIndexes.length; i++) {
+        const playerIndex = playerIndexes[i];
+        
+        // compruebas la fila
+        const rowNum = tictactoe.getRowNum(playerIndex, 3);
+        const rowPoints = tictactoe.getRowPoints(rowNum, 3);
+
+        let win = checkPointsWereClickedByPlayer(rowPoints, playerSide, board);
+
+        // compruebas la columna
+        if (!win) {
+            const colNum = tictactoe.getColNum(playerIndex, 3);
+            const colPoints = tictactoe.getColPoints(colNum, 3);
+            win = checkPointsWereClickedByPlayer(colPoints, playerSide, board);
+        }
+
+        // compruebas las diagonales
+        if (!win) {
+            // Compruebas la diagonal izq
+            const leftDiagonalPoints = tictactoe.getLeftDiagonalPoints(3);
+            win = checkPointsWereClickedByPlayer(leftDiagonalPoints, playerSide, board);
+            // Compruebas la diagonal der
+            if (!win) {
+                const rightDiagonalPoints = tictactoe.getRightDiagonalPoints(3);
+                win = checkPointsWereClickedByPlayer(rightDiagonalPoints, playerSide, board);
+            }
+        }
+
+        if (win) {
+            return `${playerSide} ${gameStatus.WINNER}`;
+        }
+    }
+    return false;
+}
+
+const checkPointsWereClickedByPlayer = (points, playerSide, board) => {
+    let allClicked = true;
+    for (let j = 0; j < points.length; j++) {
+        const pointClicked = points[j];
+        if (board[pointClicked] !== playerSide) {
+            allClicked = false;
+            break;
+        }
+    }
+
+    return allClicked;
+}
+
+/**
+ * Comprobar si un tablero está acabado o no
+ */
+const isGameFinished = board => {
+    const filledPoints = board.filter(index => index != undefined);
+    
+    return filledPoints.length === 9;
+}
+
 
 /**
  * Realiza una jugada por el player en el tablero pasado
@@ -11,30 +98,23 @@ const ticTacToe = require('../../lib/tictactoe');
  * 
  * @returns tablero con la nueva jugada añadida
  */
-const getNewPlay = (board, player, rival) => {
-    console.log(`board`, board);
-    
+const getNewPlay = (board, player, rival) => {    
     const playerIndexes = getPlayerIndexes(board, player);
     const rivalIndexes =  getPlayerIndexes(board, rival);
 
     let playedIndex = -1;
 
     // Comprobar si podemos hacer una jugada de victoria: 
-    console.log("Compruebo si puedo ganar");      
     playedIndex = obtainWinnerPoint(playerIndexes, rivalIndexes);
-    console.log("Punto retornado: ", playedIndex);      
     
     // Si no, comprobar si podemos hacer una jugada para evitar una derrota
-    console.log("Compruebo si puedo perder");      
     if (playedIndex === -1) {
         playedIndex = obtainWinnerPoint(rivalIndexes, playerIndexes);
-        console.log("Punto retornado: ", playedIndex); 
     }
 
     // Si no, marcar aleatoriamente
     if (playedIndex === -1) {
         playedIndex = getRandomIndex(board); // aleatorio
-        console.log("Punto retornado: ", playedIndex);
     }
 
     board[playedIndex] = player;
@@ -53,16 +133,13 @@ const obtainWinnerPoint = (playerIndexes, rivalIndexes) => {
         // Por cada punto, 
         for (let i = 0; i < playerIndexes.length; i++) {
             const playerIndex = playerIndexes[i];
-        
-            console.log('Compruebo filas');            
+                   
             winnerPoint = obtainWinnerRowPoint(playerIndex, playerIndexes, rivalIndexes);            
             if (winnerPoint !== -1) return winnerPoint;
             
-            console.log('Compruebo columnas');
             winnerPoint = obtainWinnerColPoint(playerIndex, playerIndexes, rivalIndexes);            
             if (winnerPoint !== -1) return winnerPoint;
             
-            console.log('Compruebo diagonales');
             winnerPoint = obtainerWinnerDiagonalPoint(playerIndex, playerIndexes, rivalIndexes);            
             if (winnerPoint !== -1) return winnerPoint;
         }
@@ -72,9 +149,9 @@ const obtainWinnerPoint = (playerIndexes, rivalIndexes) => {
 
 const obtainWinnerRowPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
     // Sacar número de fila
-    const rowNum = ticTacToe.getRowNum(currentPlayerIndex, 3);
+    const rowNum = tictactoe.getRowNum(currentPlayerIndex, 3);
     // Sacar puntos de la fila
-    const rowIndexes = ticTacToe.getRowPoints(rowNum, 3);
+    const rowIndexes = tictactoe.getRowPoints(rowNum, 3);
     return obtainPossibleWinnerIndex(rowIndexes, playerIndexes, rivalIndexes);
 }
 
@@ -99,27 +176,27 @@ const obtainWinnerIndexIfNotChosen = (unmarkedIndexes, rivalIndexes) => {
 
 const obtainWinnerColPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
     // Sacar número de columna
-    const colNum = ticTacToe.getColNum(currentPlayerIndex, 3);
+    const colNum = tictactoe.getColNum(currentPlayerIndex, 3);
     // Sacar puntos de la columna
-    const colIndexes = ticTacToe.getColPoints(colNum, 3);
+    const colIndexes = tictactoe.getColPoints(colNum, 3);
     return obtainPossibleWinnerIndex(colIndexes, playerIndexes, rivalIndexes);
 }
 
 const obtainerWinnerDiagonalPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
-    const rowNum = ticTacToe.getRowNum(currentPlayerIndex, 3);
-    const colNum = ticTacToe.getColNum(currentPlayerIndex, 3);
+    const rowNum = tictactoe.getRowNum(currentPlayerIndex, 3);
+    const colNum = tictactoe.getColNum(currentPlayerIndex, 3);
     
-    if (!ticTacToe.isDiagonalAvailable(rowNum, colNum)) {
+    if (!tictactoe.isDiagonalAvailable(rowNum, colNum)) {
         return -1;
     }
 
     let possibleIndex = -1;
 
-    const leftDiagonalIndexes = ticTacToe.getLeftDiagonalPoints(3);
+    const leftDiagonalIndexes = tictactoe.getLeftDiagonalPoints(3);
     possibleIndex = obtainPossibleWinnerIndex(leftDiagonalIndexes, playerIndexes, rivalIndexes);
     
     if (possibleIndex === -1) {
-        const rightDiagonalIndexes = ticTacToe.getRightDiagonalPoints(3);
+        const rightDiagonalIndexes = tictactoe.getRightDiagonalPoints(3);
         possibleIndex = obtainPossibleWinnerIndex(rightDiagonalIndexes, playerIndexes, rivalIndexes);
     }
 
@@ -132,5 +209,7 @@ const getRandomIndex = board => {
 
 
 module.exports = {
+    isGameFinished,
+    getGameStatus,
     getNewPlay
 }

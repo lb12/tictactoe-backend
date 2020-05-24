@@ -26,48 +26,6 @@ const getColNum = (id, totalCols) => {
   return col;
 };
 
-// Comprueba diagonales, filas y columnas para saber si hay una coincidencia de 3.
-// Devuelve VICTORIA, EMPATE, SEGUIR JUGANDO
-const checkWin = (
-  rowPoint,
-  colPoint,
-  turnLetter,
-  BOARD_SIZE,
-  currentSquares
-) => {
-  let ticTacToeRow = checkTicTacToeRowOrCol(
-    getRowPoints(rowPoint, BOARD_SIZE),
-    currentSquares,
-    turnLetter
-  );
-  let ticTacToeCol = checkTicTacToeRowOrCol(
-    getColPoints(colPoint, BOARD_SIZE),
-    currentSquares,
-    turnLetter
-  );
-  let ticTacToeDiagonal = checkTicTacToeDiagonales(
-    rowPoint,
-    colPoint,
-    BOARD_SIZE,
-    currentSquares,
-    turnLetter
-  );
-
-  const isVictory = ticTacToeRow || ticTacToeCol || ticTacToeDiagonal;
-
-  const isDraw =
-    currentSquares.filter(cs => cs !== undefined).length ===
-    Math.pow(BOARD_SIZE, 2);
-
-  const finalMessage = isVictory ?
-    `'${turnLetter}' GANA` :
-    isDraw ?
-    "EMPATE" :
-    `Turno de '${turnLetter === "X" ? "O" : "X"}'`;
-
-  return finalMessage;
-};
-
 // Comprueba si hay una diagonal ganadora a partir de un punto
 const checkTicTacToeDiagonales = (
   row,
@@ -184,3 +142,61 @@ module.exports = {
   getLeftDiagonalPoints,
   getRightDiagonalPoints
 }
+
+
+
+
+
+
+
+
+
+
+
+/*
+
+
+// Comprueba diagonales, filas y columnas para saber si hay una coincidencia de 3.
+// Devuelve VICTORIA, EMPATE, SEGUIR JUGANDO
+const checkWin = (
+  rowPoint,
+  colPoint,
+  turnLetter,
+  BOARD_SIZE,
+  currentSquares
+) => {
+  let ticTacToeRow = checkTicTacToeRowOrCol(
+    getRowPoints(rowPoint, BOARD_SIZE),
+    currentSquares,
+    turnLetter
+  );
+  let ticTacToeCol = checkTicTacToeRowOrCol(
+    getColPoints(colPoint, BOARD_SIZE),
+    currentSquares,
+    turnLetter
+  );
+  let ticTacToeDiagonal = checkTicTacToeDiagonales(
+    rowPoint,
+    colPoint,
+    BOARD_SIZE,
+    currentSquares,
+    turnLetter
+  );
+
+  const isVictory = ticTacToeRow || ticTacToeCol || ticTacToeDiagonal;
+
+  const isDraw =
+    currentSquares.filter(cs => cs !== undefined).length ===
+    Math.pow(BOARD_SIZE, 2);
+
+  const finalMessage = isVictory ?
+    `'${turnLetter}' GANA` :
+    isDraw ?
+    "EMPATE" :
+    `Turno de '${turnLetter === "X" ? "O" : "X"}'`;
+
+  return finalMessage;
+};
+
+
+*/
