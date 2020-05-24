@@ -18,10 +18,9 @@ const getGameStatus = (board, bot, rival) => {
     const rivalIndexes = ticTacToe.getPlayerIndexes(rival);
 
     let result = false;
-    // Comprobar si hemos ganado
+
     result = ticTacToe.hasPlayerWon(botIndexes, bot);
 
-    // Comprobar si hemos perdido
     if (!result) {
         result = ticTacToe.hasPlayerWon(rivalIndexes, rival);
     }
@@ -30,7 +29,6 @@ const getGameStatus = (board, bot, rival) => {
         return gameStatus.GAME_IN_PROGRESS;
     }
 
-    // Comprobar si hemos empatado
     if (!result) {
         result = gameStatus.DRAW;
     }
@@ -39,7 +37,6 @@ const getGameStatus = (board, bot, rival) => {
 }
 
 
-// Comprueba si es el turno del bot o no
 const isBotTurnValid = (board, isBotX) => {
     ticTacToe = ticTacToe || new TicTacToe(board, BOARD_SIZE);
 
