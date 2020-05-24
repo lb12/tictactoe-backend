@@ -15,7 +15,7 @@ module.exports = {
             .isString().isLength({ min: 0, max: 1 }).withMessage(codes.MUST_BE_MAX_9_CHARS)
             .matches(/[XO]/).withMessage(codes.MUST_BE_X_OR_O),
         body('isPlayerX')
-            .exists({checkFalsy: true, checkNull: true}).withMessage(codes.MUST_NOT_BE_EMPTY)
+            .exists({checkFalsy: false, checkNull: true}).withMessage(codes.MUST_NOT_BE_EMPTY)
             .isBoolean().withMessage(codes.MUST_BE_BOOLEAN)
     ]
 }

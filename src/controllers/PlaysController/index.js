@@ -16,8 +16,8 @@ const getNewPlay = (req, res, next) => {
 
     const { board, isPlayerX } = req.body;
  
-    const player = isPlayerX ? 'X' : 'O';
-    const rival = isPlayerX ? 'O' : 'X';
+    const player = playsService.getPlayerSide(isPlayerX);
+    const rival = playsService.getRivalSide(isPlayerX);
     
     let gameStatus = playsService.getGameStatus(board, player, rival);
 

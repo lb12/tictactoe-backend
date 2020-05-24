@@ -207,9 +207,13 @@ const getRandomIndex = board => {
     return board.filter(index => !index)[0];
 }
 
+const getPlayerSide = isPlayerX => isPlayerX ? 'X' : 'O';
+const getRivalSide = isPlayerX => getPlayerSide(!isPlayerX);
 
 module.exports = {
     isGameFinished,
     getGameStatus,
-    getNewPlay
+    getNewPlay,
+    getPlayerSide,
+    getRivalSide
 }
