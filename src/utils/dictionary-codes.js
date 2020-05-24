@@ -9,6 +9,7 @@ module.exports = {
     gameStatus: {
         WINNER: 'WINNER',
         DRAW: 'DRAW',
-        GAME_IN_PROGRESS: 'GAME_IN_PROGRESS'
+        GAME_IN_PROGRESS: 'GAME_IN_PROGRESS',
+        INVALID_TURN: 'INVALID_TURN'
     }
 }

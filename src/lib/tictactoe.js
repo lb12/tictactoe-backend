@@ -1,202 +1,237 @@
+'use strict';
+
+
 const {
-  isPair
+    gameStatus
+} = require('../utils/dictionary-codes');
+
+const {
+    isPair
 } = require("./math");
 
-// Devuelve el número de la fila a partir del index del array
-const getRowNum = (id, totalRows) => {
-  let row = 0;
 
-  do {
-    if (id < totalRows * (row + 1)) break;
-    row++;
-  } while (row < totalRows);
+class TicTacToe {
 
-  return row;
-};
-
-// Devuelve el número de la columna a partir del index del array
-const getColNum = (id, totalCols) => {
-  let col = 0;
-
-  do {
-    if ((id - col) % totalCols === 0) break;
-    col++;
-  } while (col < totalCols);
-
-  return col;
-};
-
-// Comprueba si hay una diagonal ganadora a partir de un punto
-const checkTicTacToeDiagonales = (
-  row,
-  col,
-  totalRows,
-  currentSquares,
-  currentLetterTurn
-) => {
-  const diagonales = [];
-  let ticTacToe = true;
-
-  if (!isDiagonalAvailable(row, col) && row !== col) return false;
-
-
-
-  if (!ticTacToe) {
-    let _col = totalRows - 1;
-    ticTacToe = true;
-    diagonales.length = 0;
-    for (let _row = 0; _row < totalRows; _row++, _col--) {
-      const squareId = _col + totalRows * _row;
-
-      if (currentSquares[squareId] !== currentLetterTurn) {
-        ticTacToe = false;
-        break;
-      }
-
-      diagonales.push(squareId);
+    constructor(board, boardSize) {
+        this.board = board;
+        this.boardSize = boardSize;
     }
-  }
 
-  // TODO : Devolver diagonales si queremos saber cual es la diagonal ganadora
+    // Devuelve el número de la fila a partir del index del array
+    getRowNum = id => {
+        let row = 0;
 
-  return ticTacToe;
-};
+        do {
+            if (id < this.boardSize * (row + 1)) break;
+            row++;
+        } while (row < this.boardSize);
 
-// Comprueba si dado un punto se puede trazar una diagonal
-const isDiagonalAvailable = (row, col) => isPair(row) && isPair(col);
-
-// Comprueba si una fila o columna hay una coincidencia de 3
-const checkTicTacToeRowOrCol = (
-  rowOrColList,
-  currentSquares,
-  currentLetterTurn
-) => {
-  let ticTacToe = true;
-
-  for (let i = 0; i < rowOrColList.length; i++) {
-    const pointChecked = currentSquares[rowOrColList[i]];
-
-    if (pointChecked !== currentLetterTurn) {
-      ticTacToe = false;
-      break;
+        return row;
     }
-  }
 
-  return ticTacToe;
-};
+    // Devuelve el número de la columna a partir del index del array
+    getColNum = id => {
+        let col = 0;
 
-// Devuelve los índices de una fila dado un índice del array
-const getRowPoints = (rowNum, BOARD_SIZE) => {
-  const rowPoints = [];
+        do {
+            if ((id - col) % this.boardSize === 0) break;
+            col++;
+        } while (col < this.boardSize);
 
-  const firstRowPoint = rowNum * BOARD_SIZE;
+        return col;
+    };
 
-  for (let i = 0; i < BOARD_SIZE; i++) {
-    rowPoints.push(firstRowPoint + i);
-  }
-  return rowPoints;
-};
+    // Devuelve los índices de una fila dado un índice del array
+    getRowPoints = rowNum => {
+        const rowPoints = [];
 
-// Devuelve los índices de una columna dado un índice del array
-const getColPoints = (colPoint, BOARD_SIZE) => {
-  const colPoints = [];
-  let counter = 0;
+        const firstRowPoint = rowNum * this.boardSize;
 
-  while (counter < BOARD_SIZE) {
-    colPoints.push(colPoint + BOARD_SIZE * counter);
-    counter++;
-  }
+        for (let i = 0; i < this.boardSize; i++) {
+            rowPoints.push(firstRowPoint + i);
+        }
+        return rowPoints;
+    };
 
-  return colPoints;
-};
+    // Devuelve los índices de una columna dado un índice del array
+    getColPoints = colPoint => {
+        const colPoints = [];
+        let counter = 0;
 
-const getLeftDiagonalPoints = (BOARD_SIZE) => {
-  const diagonalPoints = [];
-  for (let row = 0; row < BOARD_SIZE; row++) {
-    const index = row + BOARD_SIZE * row;
-    diagonalPoints.push(index);
-  }
+        while (counter < this.boardSize) {
+            colPoints.push(colPoint + this.boardSize * counter);
+            counter++;
+        }
 
-  return diagonalPoints;
+        return colPoints;
+    };
+
+    // Devuelve los índices de la diagonal superior izq-der
+    getLeftDiagonalPoints = () => {
+        const diagonalPoints = [];
+        for (let row = 0; row < this.boardSize; row++) {
+            const index = row + this.boardSize * row;
+            diagonalPoints.push(index);
+        }
+
+        return diagonalPoints;
+    }
+
+    // Devuelve los índices de la diagonal superior der-izq
+    getRightDiagonalPoints = () => {
+        const diagonalPoints = [];
+        let col = this.boardSize - 1;
+
+        for (let row = 0; row < this.boardSize; row++, col--) {
+            const index = col + this.boardSize * row;
+            diagonalPoints.push(index);
+        }
+
+        return diagonalPoints;
+    }
+
+    // Devuelve las posiciones en las que se encuentran las letras indicadas como parámetro
+    getPlayerIndexes = letterSide => this.board.map((point, index) => point === letterSide ? index : "").filter(point => point !== "");
+
+    // Devuelve una posición aleatoria que quede libre en el tablero
+    getRandomIndex = () => this.board.map((point, index) => point === "" ? index : undefined).filter(point => point !== undefined)[0];
+
+    getBoardLength = () => Math.pow(this.boardSize, 2);
+
+    // Comprueba si dado un punto se puede trazar una diagonal
+    isDiagonalAvailable = (row, col) => isPair(row) && isPair(col);
+
+    // Devuelve una posición que le de la victoria al jugador
+    obtainWinnerPoint = (player1Indexes, player2Indexes) => {
+        // Para hacer victoria al menos tiene que haber marcado dos puntos
+        if (player1Indexes.length > 2) {
+            let winnerPoint = -1;
+            for (let i = 0; i < player1Indexes.length; i++) {
+                const player1Index = player1Indexes[i];
+
+                winnerPoint = this.obtainWinnerRowPoint(player1Index, player1Indexes, player2Indexes);
+                if (winnerPoint !== -1) return winnerPoint;
+
+                winnerPoint = this.obtainWinnerColPoint(player1Index, player1Indexes, player2Indexes);
+                if (winnerPoint !== -1) return winnerPoint;
+
+                winnerPoint = this.obtainerWinnerDiagonalPoint(player1Index, player1Indexes, player2Indexes);
+                if (winnerPoint !== -1) return winnerPoint;
+            }
+        }
+        return -1;
+    }
+
+    obtainWinnerRowPoint = (currentPlayer1Index, player1Indexes, player2Indexes) => {
+        // Sacar número de fila
+        const rowNum = this.getRowNum(currentPlayer1Index);
+        // Sacar puntos de la fila
+        const rowIndexes = this.getRowPoints(rowNum);
+        return this.obtainPossibleWinnerIndex(rowIndexes, player1Indexes, player2Indexes);
+    }
+
+    obtainPossibleWinnerIndex = (indexes, player1Indexes, player2Indexes) => {
+        const unmarkedIndexes = indexes.filter(index => !player1Indexes.includes(index));
+        return this.obtainWinnerIndexIfNotChosen(unmarkedIndexes, player2Indexes);
+    }
+
+    obtainWinnerIndexIfNotChosen = (unmarkedIndexes, player2Indexes) => {
+        const moreThanOnePossibility = unmarkedIndexes.length > 1;
+
+        if (moreThanOnePossibility) return -1;
+
+        const possibleWinnerIndex = unmarkedIndexes[0];
+
+        if (!player2Indexes.includes(possibleWinnerIndex)) {
+            return possibleWinnerIndex;
+        }
+
+        return -1;
+    }
+
+    obtainWinnerColPoint = (currentBotIndex, player1Indexes, player2Indexes) => {
+        // Sacar número de columna
+        const colNum = this.getColNum(currentBotIndex);
+        // Sacar puntos de la columna
+        const colIndexes = this.getColPoints(colNum);
+        return this.obtainPossibleWinnerIndex(colIndexes, player1Indexes, player2Indexes);
+    }
+
+    obtainerWinnerDiagonalPoint = (currentBotIndex, player1Indexes, player2Indexes) => {
+        const rowNum = this.getRowNum(currentBotIndex);
+        const colNum = this.getColNum(currentBotIndex);
+
+        if (!this.isDiagonalAvailable(rowNum, colNum)) {
+            return -1;
+        }
+
+        let possibleIndex = -1;
+
+        const leftDiagonalIndexes = this.getLeftDiagonalPoints();
+        possibleIndex = this.obtainPossibleWinnerIndex(leftDiagonalIndexes, player1Indexes, player2Indexes);
+
+        if (possibleIndex === -1) {
+            const rightDiagonalIndexes = this.getRightDiagonalPoints();
+            possibleIndex = this.obtainPossibleWinnerIndex(rightDiagonalIndexes, player1Indexes, player2Indexes);
+        }
+
+        return possibleIndex;
+    }
+
+    hasPlayerWon = (playerIndexes, playerSide) => {
+        for (let i = 0; i < playerIndexes.length; i++) {
+            const playerIndex = playerIndexes[i];
+
+            // compruebas la fila
+            const rowNum = this.getRowNum(playerIndex);
+            const rowPoints = this.getRowPoints(rowNum);
+
+            let win = this.checkPointsWereClickedByBot(rowPoints, playerSide);
+
+            // compruebas la columna
+            if (!win) {
+                const colNum = this.getColNum(playerIndex);
+                const colPoints = this.getColPoints(colNum);
+                win = this.checkPointsWereClickedByBot(colPoints, playerSide);
+            }
+
+            // compruebas las diagonales
+            if (!win) {
+                // Compruebas la diagonal izq
+                const leftDiagonalPoints = this.getLeftDiagonalPoints();
+                win = this.checkPointsWereClickedByBot(leftDiagonalPoints, playerSide);
+                // Compruebas la diagonal der
+                if (!win) {
+                    const rightDiagonalPoints = this.getRightDiagonalPoints();
+                    win = this.checkPointsWereClickedByBot(rightDiagonalPoints, playerSide);
+                }
+            }
+
+            if (win) {
+                return `${playerSide} ${gameStatus.WINNER}`;
+            }
+        }
+        return false;
+    }
+
+    checkPointsWereClickedByBot = (points, playerSide) => {
+        let allClicked = true;
+        for (let j = 0; j < points.length; j++) {
+            const pointClicked = points[j];
+            if (this.board[pointClicked] !== playerSide) {
+                allClicked = false;
+                break;
+            }
+        }
+
+        return allClicked;
+    }
+
+    // Comprobar si un tablero está acabado o no
+    isGameFinished = () => {
+        const filledPoints = this.board.filter(index => index != "");
+        return filledPoints.length === this.getBoardLength();
+    }
 }
 
-const getRightDiagonalPoints = (BOARD_SIZE) => {
-  const diagonalPoints = [];
-  let col = BOARD_SIZE - 1;
-
-  for (let row = 0; row < BOARD_SIZE; row++, col--) {
-    const index = col + BOARD_SIZE * row;
-    diagonalPoints.push(index);
-  }
-
-  return diagonalPoints;
-}
-
-module.exports = {
-  isDiagonalAvailable,
-  getRowPoints,
-  getRowNum,
-  getColPoints,
-  getColNum,
-  isDiagonalAvailable,
-  getLeftDiagonalPoints,
-  getRightDiagonalPoints
-}
-
-
-
-
-
-
-
-
-
-
-
-/*
-
-
-// Comprueba diagonales, filas y columnas para saber si hay una coincidencia de 3.
-// Devuelve VICTORIA, EMPATE, SEGUIR JUGANDO
-const checkWin = (
-  rowPoint,
-  colPoint,
-  turnLetter,
-  BOARD_SIZE,
-  currentSquares
-) => {
-  let ticTacToeRow = checkTicTacToeRowOrCol(
-    getRowPoints(rowPoint, BOARD_SIZE),
-    currentSquares,
-    turnLetter
-  );
-  let ticTacToeCol = checkTicTacToeRowOrCol(
-    getColPoints(colPoint, BOARD_SIZE),
-    currentSquares,
-    turnLetter
-  );
-  let ticTacToeDiagonal = checkTicTacToeDiagonales(
-    rowPoint,
-    colPoint,
-    BOARD_SIZE,
-    currentSquares,
-    turnLetter
-  );
-
-  const isVictory = ticTacToeRow || ticTacToeCol || ticTacToeDiagonal;
-
-  const isDraw =
-    currentSquares.filter(cs => cs !== undefined).length ===
-    Math.pow(BOARD_SIZE, 2);
-
-  const finalMessage = isVictory ?
-    `'${turnLetter}' GANA` :
-    isDraw ?
-    "EMPATE" :
-    `Turno de '${turnLetter === "X" ? "O" : "X"}'`;
-
-  return finalMessage;
-};
-
-
-*/
+module.exports = TicTacToe;
