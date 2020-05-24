@@ -3,7 +3,7 @@
 const tictactoe = require('../../lib/tictactoe');
 const { gameStatus } = require('../../utils/dictionary-codes');
 
-
+const BOARD_SIZE = process.env.BOARD_SIZE || 3;
 
 const getGameStatus = (board, player, rival) => {
     const playerIndexes = getPlayerIndexes(board, player);
@@ -35,26 +35,26 @@ const checkPlayerWin = (board, playerIndexes, playerSide) => {
         const playerIndex = playerIndexes[i];
         
         // compruebas la fila
-        const rowNum = tictactoe.getRowNum(playerIndex, 3);
-        const rowPoints = tictactoe.getRowPoints(rowNum, 3);
+        const rowNum = tictactoe.getRowNum(playerIndex, BOARD_SIZE);
+        const rowPoints = tictactoe.getRowPoints(rowNum, BOARD_SIZE);
 
         let win = checkPointsWereClickedByPlayer(rowPoints, playerSide, board);
 
         // compruebas la columna
         if (!win) {
-            const colNum = tictactoe.getColNum(playerIndex, 3);
-            const colPoints = tictactoe.getColPoints(colNum, 3);
+            const colNum = tictactoe.getColNum(playerIndex, BOARD_SIZEBOARD_SIZE);
+            const colPoints = tictactoe.getColPoints(colNum, BOARD_SIZE);
             win = checkPointsWereClickedByPlayer(colPoints, playerSide, board);
         }
 
         // compruebas las diagonales
         if (!win) {
             // Compruebas la diagonal izq
-            const leftDiagonalPoints = tictactoe.getLeftDiagonalPoints(3);
+            const leftDiagonalPoints = tictactoe.getLeftDiagonalPoints(BOARD_SIZE);
             win = checkPointsWereClickedByPlayer(leftDiagonalPoints, playerSide, board);
             // Compruebas la diagonal der
             if (!win) {
-                const rightDiagonalPoints = tictactoe.getRightDiagonalPoints(3);
+                const rightDiagonalPoints = tictactoe.getRightDiagonalPoints(BOARD_SIZE);
                 win = checkPointsWereClickedByPlayer(rightDiagonalPoints, playerSide, board);
             }
         }
@@ -149,9 +149,9 @@ const obtainWinnerPoint = (playerIndexes, rivalIndexes) => {
 
 const obtainWinnerRowPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
     // Sacar número de fila
-    const rowNum = tictactoe.getRowNum(currentPlayerIndex, 3);
+    const rowNum = tictactoe.getRowNum(currentPlayerIndex, BOARD_SIZE);
     // Sacar puntos de la fila
-    const rowIndexes = tictactoe.getRowPoints(rowNum, 3);
+    const rowIndexes = tictactoe.getRowPoints(rowNum, BOARD_SIZE);
     return obtainPossibleWinnerIndex(rowIndexes, playerIndexes, rivalIndexes);
 }
 
@@ -176,15 +176,15 @@ const obtainWinnerIndexIfNotChosen = (unmarkedIndexes, rivalIndexes) => {
 
 const obtainWinnerColPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
     // Sacar número de columna
-    const colNum = tictactoe.getColNum(currentPlayerIndex, 3);
+    const colNum = tictactoe.getColNum(currentPlayerIndex, BOARD_SIZE);
     // Sacar puntos de la columna
-    const colIndexes = tictactoe.getColPoints(colNum, 3);
+    const colIndexes = tictactoe.getColPoints(colNum, BOARD_SIZE);
     return obtainPossibleWinnerIndex(colIndexes, playerIndexes, rivalIndexes);
 }
 
 const obtainerWinnerDiagonalPoint = (currentPlayerIndex, playerIndexes, rivalIndexes) => {
-    const rowNum = tictactoe.getRowNum(currentPlayerIndex, 3);
-    const colNum = tictactoe.getColNum(currentPlayerIndex, 3);
+    const rowNum = tictactoe.getRowNum(currentPlayerIndex, BOARD_SIZE);
+    const colNum = tictactoe.getColNum(currentPlayerIndex, BOARD_SIZE);
     
     if (!tictactoe.isDiagonalAvailable(rowNum, colNum)) {
         return -1;
@@ -192,11 +192,11 @@ const obtainerWinnerDiagonalPoint = (currentPlayerIndex, playerIndexes, rivalInd
 
     let possibleIndex = -1;
 
-    const leftDiagonalIndexes = tictactoe.getLeftDiagonalPoints(3);
+    const leftDiagonalIndexes = tictactoe.getLeftDiagonalPoints(BOARD_SIZE);
     possibleIndex = obtainPossibleWinnerIndex(leftDiagonalIndexes, playerIndexes, rivalIndexes);
     
     if (possibleIndex === -1) {
-        const rightDiagonalIndexes = tictactoe.getRightDiagonalPoints(3);
+        const rightDiagonalIndexes = tictactoe.getRightDiagonalPoints(BOARD_SIZE);
         possibleIndex = obtainPossibleWinnerIndex(rightDiagonalIndexes, playerIndexes, rivalIndexes);
     }
 
