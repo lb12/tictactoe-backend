@@ -62,7 +62,7 @@ Con el servidor arrancado y utilizando Postman para probar el API, tenemos las s
 
 ### Movimiento para ganar la partida
 ```
-GET https://localhost:3001/api/plays
+POST https://localhost:3001/api/plays
 
 // En el body añadimos el tablero y con qué jugará el bot (X ó O):
 {
@@ -74,7 +74,7 @@ El bot debería de marcar la última casilla para ganar la partida.
 
 ### Movimiento para evitar perder la partida
 ```
-GET https://localhost:3001/api/plays
+POST https://localhost:3001/api/plays
 
 // En el body añadimos el tablero y con qué jugará el bot (X ó O):
 {

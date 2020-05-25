@@ -1,0 +1,62 @@
+swagger: "2.0"
+info:
+  author: "David Escribano Rodríguez"
+  version: "1.0.0"
+  title: "TicTacToe API Doc"
+  description: "Minimal documentation of the TicTacToe API. You can find more information about the project on the [GitHub project URL](https://github.com/lb12/tictactoe-backend)."
+  contact:
+    email: "david.escribanor@gmail.com"
+  license:
+    name: "MIT"
+    url: "https://opensource.org/licenses/MIT"
+basePath: "/api"
+tags:
+  - name: "Plays"
+    description: "Plays from AI"
+schemes:
+  - "https"
+consumes:
+  - "application/json"
+produces:
+  - "application/json"
+paths:
+  /plays:
+    post:
+      tags:
+        - "Plays"
+      summary: "Request to the AI realize a new play and get the board and game status"
+      parameters:
+        - in: "body"
+          name: "body"
+          description: "Board to play and what role has the bot"
+          schema:
+            $ref: "#/definitions/Play"
+      responses:
+        200:
+          description: "Successfull operation"
+          schema:
+            $ref: "#/definitions/PlayMade"
+        422:
+          description: "Validation error"
+        500:
+          description: "Internal server error"
+
+definitions:
+  Play:
+    type: "object"
+    properties:
+      board:
+        type: "array"
+        items:
+          type: "string"
+      botIsX:
+        type: "boolean"
+  PlayMade:
+    type: "object"
+    properties:
+      board:
+        type: "array"
+        items:
+          type: "string"
+      gameStatus:
+        type: "string"

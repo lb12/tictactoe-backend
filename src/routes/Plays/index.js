@@ -9,6 +9,6 @@ const { getNewPlayValidation } = require('../../middlewares/validations/PlaysVal
 const { getNewPlay } = require('../../controllers/PlaysController');
 
 
-router.get(`/`, getNewPlayValidation, getNewPlay);
+router.post(`/`, getNewPlayValidation, getNewPlay);
 
 module.exports = router;
