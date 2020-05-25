@@ -4,9 +4,14 @@
   "description": "",
   "scripts": {
     "start": "node ./src",
-    "dev": "cross-env nodemon"
+    "dev": "cross-env nodemon",
+    "test": "mocha './src/__tests__/testApi.js'"
   },
-  "keywords": ["tictactoe", "artificial intelligence", "3 en raya"],
+  "keywords": [
+    "tictactoe",
+    "artificial intelligence",
+    "3 en raya"
+  ],
   "author": "David Escribano Rodriguez",
   "license": "ISC",
   "dependencies": {
@@ -18,6 +23,8 @@
     "morgan": "^1.10.0"
   },
   "devDependencies": {
-    "nodemon": "^2.0.3"
+    "mocha": "^7.2.0",
+    "nodemon": "^2.0.3",
+    "supertest": "^4.0.2"
   }
 }
