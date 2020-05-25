@@ -31,7 +31,7 @@ Crea un archivo `.env` (utiliza `.env.example` como guía) donde almacenarás to
 
 ```
 PORT=puerto deseado
-BOARD_SIZE=tamaño del tablero
+BOARD_SIZE=tamaño del tablero (normalmente 3)
 ```
 
 ## Ejecutando el servidor
