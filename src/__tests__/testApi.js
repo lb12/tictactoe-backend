@@ -21,7 +21,7 @@ describe('1. Boards with good inputs', () => {
             isBotX: true
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(200)
             .expect({ board: ["X", "", "O", "O", "X", "O", "", "X", "X"], gameStatus: `X ${gameStatus.WINNER}` }, done);
@@ -38,7 +38,7 @@ describe('1. Boards with good inputs', () => {
             isBotX: false
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(422)
             .expect({ board: ["X", "", "O", "O", "X", "O", "", "X", ""], error: gameStatus.INVALID_TURN }, done);
@@ -55,7 +55,7 @@ describe('1. Boards with good inputs', () => {
             isBotX: true
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(200)
             .expect({ board: ["X", "X", "O", "O", "O", "X", "X", "O", "X"], gameStatus: `${gameStatus.DRAW}` }, done);
@@ -72,7 +72,7 @@ describe('1. Boards with good inputs', () => {
             isBotX: true
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(200)
             .expect({ board: ["X", "O", "O", "", "O", "X", "X", "O", "X"], gameStatus: `O ${gameStatus.WINNER}` }, done);
@@ -89,7 +89,7 @@ describe('1. Boards with good inputs', () => {
             isBotX: false
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(200)
             .expect({ board: ["X", "", "O", "O", "O", "", "X", "X", "X"], gameStatus: `X ${gameStatus.WINNER}` }, done);
@@ -106,7 +106,7 @@ describe('1. Boards with good inputs', () => {
             isBotX: false
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(200)
             .expect({ board: ["X", "X", "O", "", "O", "", "", "", ""], gameStatus: `${gameStatus.GAME_IN_PROGRESS}` }, done);
@@ -123,7 +123,7 @@ describe('1. Boards with good inputs', () => {
             isBotX: false
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(200)
             .expect({ board: ["X", "O", "", "", "", "", "", "", ""], gameStatus: `${gameStatus.GAME_IN_PROGRESS}` }, done);
@@ -141,7 +141,7 @@ describe('2. Boards with bad inputs', () => {
             board: ["X", "", "O", "O", "X", "O", "", "X", ""]
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(422)
             .expect({ status: 422, data: 'Validation failed - isBotX MUST_NOT_BE_EMPTY' }, done);
@@ -153,7 +153,7 @@ describe('2. Boards with bad inputs', () => {
             isBotX: true
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(422)
             .expect({ status: 422, data: 'Validation failed - board MUST_BE_ARRAY_9_ELEMENTS' }, done);
@@ -165,7 +165,7 @@ describe('2. Boards with bad inputs', () => {
             isBotX: true
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(422)
             .expect({ status: 422, data: 'Validation failed - board[0] MUST_BE_X_OR_O' }, done);
@@ -177,7 +177,7 @@ describe('2. Boards with bad inputs', () => {
             isBotX: true
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(422)
             .expect({ status: 422, data: 'Validation failed - board[1] Invalid value' }, done);
@@ -189,7 +189,7 @@ describe('2. Boards with bad inputs', () => {
             isBotX: "yes"
         };
         request(app)
-            .get('/api/plays')
+            .post('/api/plays')
             .send(body)
             .expect(422)
             .expect({ status: 422, data: 'Validation failed - isBotX MUST_BE_BOOLEAN' }, done);

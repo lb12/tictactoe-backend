@@ -28,7 +28,6 @@ const getNewPlay = (req, res, next) => {
     if (!playsService.isBotTurnValid(board, isBotX)) {
         return res.status(422).json({ board, error: dictionaryCodes.gameStatus.INVALID_TURN });
     }
-
     const newBoard = playsService.getNewPlay(board, bot, rival);
     gameStatus = playsService.getGameStatus(newBoard, bot, rival);
     

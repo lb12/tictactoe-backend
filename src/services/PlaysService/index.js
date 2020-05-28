@@ -61,7 +61,7 @@ const isBotTurnValid = (board, isBotX) => {
  */
 const getNewPlay = (board, bot, rival) => {
     ticTacToe = new TicTacToe(board, BOARD_SIZE);
-
+    
     const botIndexes = ticTacToe.getPlayerIndexes(bot);
     const rivalIndexes = ticTacToe.getPlayerIndexes(rival);
 
@@ -70,16 +70,17 @@ const getNewPlay = (board, bot, rival) => {
     // Comprobar si podemos hacer una jugada de victoria: 
     playedIndex = ticTacToe.obtainWinnerPoint(botIndexes, rivalIndexes);
     
+    
     // Si no, comprobar si podemos hacer una jugada para evitar una derrota
     if (playedIndex === -1) {
         playedIndex = ticTacToe.obtainWinnerPoint(rivalIndexes, botIndexes);
     }
-
+    
     // Si no, marcar aleatoriamente
     if (playedIndex === -1) {        
         playedIndex = ticTacToe.getRandomIndex(); // aleatorio
     }
-
+    
     board[playedIndex] = bot;
 
     return board;

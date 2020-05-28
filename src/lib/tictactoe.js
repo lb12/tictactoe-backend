@@ -104,7 +104,7 @@ class TicTacToe {
     // Devuelve una posición que le de la victoria al jugador
     obtainWinnerPoint = (player1Indexes, player2Indexes) => {
         // Para hacer victoria al menos tiene que haber marcado dos puntos
-        if (player1Indexes.length > 2) {
+        if (player1Indexes.length >= 2) {
             let winnerPoint = -1;
             for (let i = 0; i < player1Indexes.length; i++) {
                 const player1Index = player1Indexes[i];
@@ -132,6 +132,7 @@ class TicTacToe {
 
     obtainPossibleWinnerIndex = (indexes, player1Indexes, player2Indexes) => {
         const unmarkedIndexes = indexes.filter(index => !player1Indexes.includes(index));
+        
         return this.obtainWinnerIndexIfNotChosen(unmarkedIndexes, player2Indexes);
     }
 

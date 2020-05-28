@@ -6,11 +6,13 @@ const logger = require('morgan');
 const createError = require('http-errors');
 const swaggerUi = require("swagger-ui-express");
 const YAML = require("yamljs");
-const swaggerConfig = YAML.load("./swagger.yaml");
+const cors = require('cors');
 
 // Own imports
 const { HomeRouter, PlaysRouter } = require('./routes');
 const { ErrorMiddleware } = require('./middlewares');
+
+const swaggerConfig = YAML.load("./swagger.yaml");
 
 // App express
 const app = express();
@@ -19,6 +21,7 @@ const app = express();
 app.use(logger('dev'));
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
+app.use(cors());
 
 // API Routes
 app.use(`/api/plays`, PlaysRouter)
