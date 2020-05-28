@@ -12,8 +12,8 @@ const app = require('./app');
 
 // Prepare certs
 const certs = {
-  key: fs.readFileSync('./certs/example.com+5-key.pem'),
-  cert: fs.readFileSync('./certs/example.com+5.pem')
+  key: fs.readFileSync(process.env.KEY_FILE_PATH),
+  cert: fs.readFileSync(process.env.CERT_FILE_PATH)
 };
 
 const server = https.createServer(certs, app);
