@@ -32,6 +32,8 @@ Crea un archivo `.env` (utiliza `.env.example` como guía) donde almacenarás to
 ```
 PORT=puerto deseado
 BOARD_SIZE=tamaño del tablero (normalmente 3)
+KEY_FILE_PATH=./certs/key_file.pem
+CERT_FILE_PATH=./certs/cert_file.pem
 ```
 
 ## Ejecutando el servidor
