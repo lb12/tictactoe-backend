@@ -93,6 +93,13 @@ Si quieres ver más documentación o probar directamente el API, arranca el serv
 
 Se te mostrará una página con Swagger para que puedas probar directamente el API.
 
+## Acciones futuras
+Planteamiento de añadir funcionalidades como:
+
+* Guardar jugadas del bot en una base de datos, para poder analizar más adelante.
+* Guardar número de jugadas en una misma partida (gestión de partidas)
+* Añadir `socket.io` para crear partidas 1v1.
+
 ## Dudas o preguntas
 Si tienes alguna duda o pregunta sobre el API puedes contactar conmigo a través de mis redes sociales:
 ```
