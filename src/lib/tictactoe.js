@@ -188,12 +188,14 @@ class TicTacToe {
             const rowPoints = this.getRowPoints(rowNum);
 
             let win = this.checkPointsWereClickedByBot(rowPoints, playerSide);
+            let winnerCombination = rowPoints;
 
             // compruebas la columna
             if (!win) {
                 const colNum = this.getColNum(playerIndex);
                 const colPoints = this.getColPoints(colNum);
                 win = this.checkPointsWereClickedByBot(colPoints, playerSide);
+                winnerCombination = colPoints;
             }
 
             // compruebas las diagonales
@@ -201,15 +203,17 @@ class TicTacToe {
                 // Compruebas la diagonal izq
                 const leftDiagonalPoints = this.getLeftDiagonalPoints();
                 win = this.checkPointsWereClickedByBot(leftDiagonalPoints, playerSide);
+                winnerCombination = leftDiagonalPoints;
                 // Compruebas la diagonal der
                 if (!win) {
                     const rightDiagonalPoints = this.getRightDiagonalPoints();
                     win = this.checkPointsWereClickedByBot(rightDiagonalPoints, playerSide);
+                    winnerCombination = rightDiagonalPoints;
                 }
             }
 
             if (win) {
-                return `${playerSide} ${gameStatus.WINNER}`;
+                return { gameStatus: `${playerSide} ${gameStatus.WINNER}`, winnerCombination };
             }
         }
         return false;

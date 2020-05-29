@@ -21,8 +21,8 @@ const getNewPlay = (req, res, next) => {
     
     let gameStatus = playsService.getGameStatus(board, bot, rival);
 
-    if (gameStatus !== dictionaryCodes.gameStatus.GAME_IN_PROGRESS) {
-        return res.status(200).json({ board, gameStatus });
+    if (gameStatus.gameStatus !== dictionaryCodes.gameStatus.GAME_IN_PROGRESS) {
+        return res.status(200).json({ board, ...gameStatus });
     }
 
     if (!playsService.isBotTurnValid(board, isBotX)) {
@@ -31,7 +31,7 @@ const getNewPlay = (req, res, next) => {
     const newBoard = playsService.getNewPlay(board, bot, rival);
     gameStatus = playsService.getGameStatus(newBoard, bot, rival);
     
-    res.status(200).json({ board: newBoard, gameStatus });
+    res.status(200).json({ board: newBoard, ...gameStatus });
 };
 
 

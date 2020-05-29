@@ -24,7 +24,7 @@ describe('1. Boards with good inputs', () => {
             .post('/api/plays')
             .send(body)
             .expect(200)
-            .expect({ board: ["X", "", "O", "O", "X", "O", "", "X", "X"], gameStatus: `X ${gameStatus.WINNER}` }, done);
+            .expect({ board: ["X", "", "O", "O", "X", "O", "", "X", "X"], gameStatus: `X ${gameStatus.WINNER}`, winnerCombination: [0, 4, 8] }, done);
     });
 
     it('Test 1.2 POST /api/plays, bot is O player, but it is turn of X player, so return Invalid turn', done => {
@@ -58,7 +58,7 @@ describe('1. Boards with good inputs', () => {
             .post('/api/plays')
             .send(body)
             .expect(200)
-            .expect({ board: ["X", "X", "O", "O", "O", "X", "X", "O", "X"], gameStatus: `${gameStatus.DRAW}` }, done);
+            .expect({ board: ["X", "X", "O", "O", "O", "X", "X", "O", "X"], gameStatus: `${gameStatus.DRAW}`, winnerCombination: [] }, done);
     });
 
     it('Test 1.4 POST /api/plays, bot is X player and receives a board that is currently finished with an O victory', done => {
@@ -75,7 +75,7 @@ describe('1. Boards with good inputs', () => {
             .post('/api/plays')
             .send(body)
             .expect(200)
-            .expect({ board: ["X", "O", "O", "", "O", "X", "X", "O", "X"], gameStatus: `O ${gameStatus.WINNER}` }, done);
+            .expect({ board: ["X", "O", "O", "", "O", "X", "X", "O", "X"], gameStatus: `O ${gameStatus.WINNER}`, winnerCombination: [1, 4, 7] }, done);
     });
 
     it('Test 1.5 POST /api/plays, bot is O player and receives a board that is currently finished with an X victory', done => {
@@ -92,7 +92,7 @@ describe('1. Boards with good inputs', () => {
             .post('/api/plays')
             .send(body)
             .expect(200)
-            .expect({ board: ["X", "", "O", "O", "O", "", "X", "X", "X"], gameStatus: `X ${gameStatus.WINNER}` }, done);
+            .expect({ board: ["X", "", "O", "O", "O", "", "X", "X", "X"], gameStatus: `X ${gameStatus.WINNER}`, winnerCombination: [6, 7, 8] }, done);
     });
 
     it('Test 1.6 POST /api/plays, bot is O player and receives a board that has an X win condition that bot has to repel', done => {
@@ -109,7 +109,7 @@ describe('1. Boards with good inputs', () => {
             .post('/api/plays')
             .send(body)
             .expect(200)
-            .expect({ board: ["X", "X", "O", "", "O", "", "", "", ""], gameStatus: `${gameStatus.GAME_IN_PROGRESS}` }, done);
+            .expect({ board: ["X", "X", "O", "", "O", "", "", "", ""], gameStatus: `${gameStatus.GAME_IN_PROGRESS}`, winnerCombination: [] }, done);
     });
 
     it('Test 1.7 POST /api/plays, bot is O player and receives a board to realize a random play', done => {
@@ -126,7 +126,7 @@ describe('1. Boards with good inputs', () => {
             .post('/api/plays')
             .send(body)
             .expect(200)
-            .expect({ board: ["X", "O", "", "", "", "", "", "", ""], gameStatus: `${gameStatus.GAME_IN_PROGRESS}` }, done);
+            .expect({ board: ["X", "O", "", "", "", "", "", "", ""], gameStatus: `${gameStatus.GAME_IN_PROGRESS}`, winnerCombination: [] }, done);
     });
 });
 

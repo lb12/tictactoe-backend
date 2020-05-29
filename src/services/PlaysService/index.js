@@ -17,7 +17,7 @@ const getGameStatus = (board, bot, rival) => {
     const botIndexes = ticTacToe.getPlayerIndexes(bot);
     const rivalIndexes = ticTacToe.getPlayerIndexes(rival);
 
-    let result = false;
+    let result;
 
     result = ticTacToe.hasPlayerWon(botIndexes, bot);
 
@@ -26,11 +26,11 @@ const getGameStatus = (board, bot, rival) => {
     }
 
     if (!result && !ticTacToe.isGameFinished()) {
-        return gameStatus.GAME_IN_PROGRESS;
+        return { gameStatus: gameStatus.GAME_IN_PROGRESS, winnerCombination: [] };
     }
 
     if (!result) {
-        result = gameStatus.DRAW;
+        result = { gameStatus: gameStatus.DRAW, winnerCombination: [] };
     }
 
     return result;
