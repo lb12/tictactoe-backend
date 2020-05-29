@@ -1,7 +1,7 @@
 # TicTacToe Backend
 
 API que simula el comportamiento de una IA jugando al tres en raya o Tic Tac Toe. 
-El bot comprueba si puede ganar la partida, si la puede perder o, en caso contrario, moverá la siguiente posición libre del tablero.
+El bot comprueba si puede ganar la partida, si la puede perder o, en caso contrario, moverá la siguiente posición libre del tablero. En caso de comprobar una victoria o una derrota, indicará las posiciones que han resultado ganadoras.
 
 ## Características y dependencias
 
