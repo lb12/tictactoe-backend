@@ -78,7 +78,7 @@ const getNewPlay = (board, bot, rival) => {
     
     // Si no, marcar aleatoriamente
     if (playedIndex === -1) {        
-        playedIndex = ticTacToe.getRandomIndex(); // aleatorio
+        playedIndex = ticTacToe.getRandomIndex();
     }
     
     board[playedIndex] = bot;

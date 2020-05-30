@@ -94,7 +94,11 @@ class TicTacToe {
     getPlayerIndexes = letterSide => this.board.map((point, index) => point === letterSide ? index : "").filter(point => point !== "");
 
     // Devuelve una posición aleatoria que quede libre en el tablero
-    getRandomIndex = () => this.board.map((point, index) => point === "" ? index : undefined).filter(point => point !== undefined)[0];
+    getRandomIndex = () => {
+        const freeIndexes = this.board.map((point, index) => point === "" ? index : undefined).filter(point => point !== undefined);
+        const randomIndex = Math.floor(Math.random() * freeIndexes.length);
+        return freeIndexes[randomIndex];
+    };
 
     getBoardLength = () => Math.pow(this.boardSize, 2);
 
